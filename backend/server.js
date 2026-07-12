@@ -9,7 +9,7 @@ const { Server } = require('socket.io');
 
 // ========= INIT =========
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 // ========= MIDDLEWARE =========
 app.use(cors());
@@ -66,6 +66,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+app.get("/", (req, res) => {
+    res.send("🚀 Safe Kids Fast Server Running Successfully");
+});
+
 // ========= ROUTES =========
 
 // 🔥 Upload API + REALTIME + DB SAVE
@@ -82,7 +86,7 @@ app.post('/upload', upload.array('files'), async (req, res) => {
 
         // 📸 File URLs
         const fileUrls = files.map(f => 
-            `http://localhost:5000/uploads/${f.filename}`
+            `https://safekidsfast.onrender.com/uploads/${f.filename}`
         );
 
         // 💾 SAVE TO MONGODB
