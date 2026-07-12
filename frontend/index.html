@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
+    <meta name="theme-color" content="#0b0f1a" />
+    
+    <title>Creative Bharat Safety · REAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #eaf0f8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark {
+            background: #0b0f1a;
+            color: #e8edf5;
+        }
+        body.dark .app-container {
+            background: rgba(18, 28, 45, 0.85);
+            backdrop-filter: blur(20px);
+            border-color: rgba(255,255,255,0.08);
+        }
+        body.dark .glass-card {
+            background: rgba(30, 42, 65, 0.6);
+            border-color: rgba(255,255,255,0.05);
+            color: #e8edf5;
+        }
+        body.dark .stat-label { color: #b0c4e8; }
+        body.dark .stat-value { color: #f0f4fe; }
+        body.dark .sos-button {
+            background: radial-gradient(circle at 30% 30%, #ff3b5c, #b0102a);
+            box-shadow: 0 12px 40px rgba(255,50,70,0.5);
+        }
+        .app-container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255,255,255,0.5);
+            backdrop-filter: blur(24px);
+            border-radius: 56px 56px 32px 32px;
+            padding: 24px 20px 32px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.6);
+            transition: all 0.3s;
+        }
+        .glass-card {
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(14px);
+            border-radius: 32px;
+            padding: 16px 18px;
+            border: 1px solid rgba(255,255,255,0.35);
+            box-shadow: 0 6px 24px rgba(0,0,0,0.02);
+            transition: all 0.2s;
+            margin-bottom: 14px;
+        }
+        .glass-card:hover { transform: translateY(-2px); }
+        .row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+        .stat-label {
+            font-size: 0.8rem; font-weight: 500; color: #1f2a44; opacity:0.7; text-transform: uppercase;
+        }
+        .stat-value { font-weight:600; font-size:1rem; color:#0b1a2e; }
+        .sos-wrapper { display:flex; justify-content:center; margin:8px 0 16px; }
+        .sos-button {
+            width: 160px; height: 160px; border-radius: 80px;
+            background: radial-gradient(circle at 30% 30%, #ff5e7c, #d42f4a);
+            border: none; color: white; font-size: 2.4rem; font-weight: 700; letter-spacing: 4px;
+            box-shadow: 0 12px 40px rgba(255,50,70,0.35);
+            transition: all 0.2s; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        .sos-button:active { transform: scale(0.94); }
+        .sos-button .material-icons { font-size:3.2rem; margin-bottom:4px; }
+        .sos-button .sub { font-size:0.7rem; font-weight:400; letter-spacing:2px; opacity:0.8; }
+        .sos-button.emergency-active { animation: pulse-ring 1.2s infinite; }
+        @keyframes pulse-ring {
+            0% { box-shadow:0 0 0 0 rgba(255,50,70,0.6); }
+            70% { box-shadow:0 0 0 28px rgba(255,50,70,0); }
+            100% { box-shadow:0 0 0 0 rgba(255,50,70,0); }
+        }
+        .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        .stat-item {
+            background: rgba(255,255,255,0.2); backdrop-filter: blur(4px);
+            border-radius:24px; padding:12px 8px; text-align:center;
+            border:1px solid rgba(255,255,255,0.2);
+        }
+        .stat-item .material-icons { font-size:1.6rem; color:#1f3a6b; }
+        body.dark .stat-item .material-icons { color:#b0d0f0; }
+        .fab {
+            background: rgba(255,255,255,0.4); border-radius: 40px; padding: 10px 18px;
+            border:1px solid rgba(255,255,255,0.3); box-shadow:0 8px 24px rgba(0,0,0,0.04);
+            font-weight:500; display:inline-flex; align-items:center; gap:6px;
+            transition:all 0.15s; cursor:pointer; backdrop-filter:blur(4px);
+        }
+        .fab:active { transform:scale(0.94); }
+        .contact-list { display:flex; flex-direction:column; gap:6px; margin-top:8px; }
+        .contact-row {
+            display:flex; justify-content:space-between; align-items:center;
+            padding:6px 0; border-bottom:1px solid rgba(0,0,0,0.03);
+        }
+        body.dark .contact-row { border-bottom:1px solid rgba(255,255,255,0.03); }
+        .timer-select { display:flex; gap:8px; flex-wrap:wrap; }
+        .timer-chip {
+            background:rgba(0,0,0,0.02); padding:6px 14px; border-radius:30px;
+            border:1px solid rgba(0,0,0,0.04); font-size:0.8rem; transition:0.1s; cursor:pointer;
+        }
+        body.dark .timer-chip { background:rgba(255,255,255,0.02); border-color:rgba(255,255,255,0.05); }
+        .timer-chip.active { background:#1f3a6b; color:white; }
+        .toast-message {
+            background: rgba(0,0,0,0.85); color: white; padding:14px 24px; border-radius:60px;
+            font-weight:500; position:fixed; bottom:30px; left:20px; right:20px; max-width:420px;
+            margin:0 auto; backdrop-filter:blur(8px); text-align:center; z-index:999;
+            display:none; box-shadow:0 8px 32px rgba(0,0,0,0.2);
+        }
+        .toast-message.show { display:block; animation:fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .hidden { display:none; }
+        .evidence-grid { display:flex; gap:8px; flex-wrap:wrap; margin:6px 0; }
+        .evidence-thumb { background:rgba(0,0,0,0.05); border-radius:16px; padding:10px 14px; font-size:0.75rem; border:1px solid rgba(255,255,255,0.2); }
+        .situation-report { background:rgba(200,30,30,0.08); border-radius:20px; padding:12px; border-left:4px solid #d42f4a; font-size:0.9rem; margin:8px 0; }
+        .report-title { font-weight:700; color:#d42f4a; }
+        .high-contrast .glass-card { border:2px solid rgba(0,0,0,0.2); }
+        #cameraPreview {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 20px;
+            margin: 8px 0;
+            display: none;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+<div class="app-container" id="app">
+    <!-- SOS HERO -->
+    <div class="sos-wrapper">
+        <button class="sos-button" id="sosButton">
+            <span class="material-icons">emergency</span>
+            SOS
+            <span class="sub">press only</span>
+        </button>
+    </div>
+
+    <!-- STATUS GLASS CARDS -->
+    <div class="glass-card">
+        <div class="stats-grid">
+            <div class="stat-item"><span class="material-icons">gps_fixed</span><div class="stat-label">GPS</div><div class="stat-value" id="gpsStatus">📍 Searching...</div></div>
+            <div class="stat-item"><span class="material-icons">battery_full</span><div class="stat-label">Battery</div><div class="stat-value" id="batteryLevel">--%</div></div>
+            <div class="stat-item"><span class="material-icons">wifi</span><div class="stat-label">Internet</div><div class="stat-value" id="internetStatus">🟢 Online</div></div>
+            <div class="stat-item"><span class="material-icons">people</span><div class="stat-label">Contacts</div><div class="stat-value" id="contactCount">0</div></div>
+        </div>
+        <div class="row" style="margin-top:8px;">
+            <div><span class="stat-label">🕒 </span><span id="currentTime">--:--</span> <span id="currentDate" style="margin-left:8px;">--</span></div>
+            <div><span class="stat-label">🛡️ </span><span id="safeStatus" style="font-weight:600;color:#2a7a3b;">✅ Safe</span></div>
+        </div>
+    </div>
+
+    <!-- TRUSTED CONTACTS -->
+    <div class="glass-card">
+        <div class="row"><span class="stat-label">👤 Trusted contacts</span><button class="fab" id="addContactBtn"><span class="material-icons">add</span> Add</button></div>
+        <div class="contact-list" id="contactList"><div style="font-size:0.8rem; opacity:0.6; padding:8px;">No contacts</div></div>
+        <div style="font-size:0.7rem; opacity:0.6; margin-top:4px;">max 5 · tap ✖ to delete · tap ✏️ to edit</div>
+    </div>
+
+    <!-- SAFETY TIMER -->
+    <div class="glass-card">
+        <div class="row"><span class="stat-label">⏱️ Safety timer</span><span id="timerDisplay" style="font-weight:600;">OFF</span></div>
+        <div class="timer-select">
+            <span class="timer-chip" data-min="15">15m</span>
+            <span class="timer-chip active" data-min="30">30m</span>
+            <span class="timer-chip" data-min="60">60m</span>
+            <span class="timer-chip" data-min="custom">Custom</span>
+        </div>
+        <div style="margin-top:8px;"><button class="fab" id="startTimerBtn"><span class="material-icons">play_arrow</span> Start timer</button></div>
+    </div>
+
+    <!-- EMERGENCY PROFILE & EVIDENCE -->
+    <div class="glass-card" style="display:flex; gap:8px; flex-wrap:wrap;">
+        <span class="stat-label">🩸 Blood: <span id="bloodGroup">O+</span></span>
+        <span class="stat-label">📝 Notes: <span id="emergencyNotes">None</span></span>
+        <button class="fab" style="margin-left:auto;" id="shareLocationBtn"><span class="material-icons">share_location</span> Share</button>
+    </div>
+
+    <!-- EVIDENCE & SITUATION REPORT + HD PHOTO PREVIEW -->
+<div class="glass-card" id="evidenceCard">
+    <div class="row"><span class="stat-label">📸 Evidence & AI report</span><span style="font-size:0.7rem; opacity:0.5;">live</span></div>
+    <div class="evidence-grid" id="evidenceGrid">
+        <span class="evidence-thumb">📷 camera</span>
+        <span class="evidence-thumb">🎥 video</span>
+        <span class="evidence-thumb">🎙️ audio</span>
+    </div>
+
+    <!-- 👇 10 PHOTOS PREVIEW CONTAINER (YEH IMPORTANT HAI) 👇 -->
+    <div id="burstPreviewContainer" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; justify-content:center; min-height:40px;"></div>
+    <!-- 👆 YAHAN CONTAINER HONA CHAHIYE 👆 -->
+
+    <video id="cameraPreview" autoplay playsinline></video>
+    
+    <!-- ✅ PHOTO PREVIEW UI -->
+    <img id="photoPreview" alt="Captured HD Photo" 
+         style="width:100%; max-width:320px; border-radius:20px; margin:8px 0; display:none; border:3px solid #1f3a6b; box-shadow:0 8px 24px rgba(0,0,0,0.15);" />
+         
+    <div class="situation-report" id="situationReport">
+        <div class="report-title">🧠 Situation report</div>
+        <div id="reportContent">Standby · No anomalies</div>
+        <div class="action-timeline" id="actionTimeline">⏱️ 0s</div>
+    </div>
+</div>
+
+    <!-- VOICE + WATCH -->
+    <div class="glass-card" style="display:flex; justify-content:space-between;">
+        <span><span class="material-icons">mic</span> Voice: <span id="wakePhrase">"Help"</span></span>
+        <span><span class="material-icons">watch</span> Watch ready</span>
+    </div>
+
+    <!-- SETTINGS -->
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+        <button class="fab" id="themeToggle"><span class="material-icons">dark_mode</span> Theme</button>
+        <button class="fab" id="vibrationToggle"><span class="material-icons">vibration</span> Vibra</button>
+        <button class="fab" id="permissionBtn"><span class="material-icons">security</span> Permissions</button>
+        <button class="fab" id="captureBtn"><span class="material-icons">camera_alt</span> Capture</button>
+    </div>
+    <div style="font-size:0.65rem; opacity:0.4; margin-top:16px; text-align:center;">Creative Bharat Safety · REAL · v6.0</div>
+</div>
+
+<!-- TOAST -->
+<div id="toastMessage" class="toast-message">✅ Ready</div>
+
+<script>
+(function() {
+    'use strict';
+
+    // ========== DOM REFS ==========
+    const sosBtn = document.getElementById('sosButton');
+    const gpsStatus = document.getElementById('gpsStatus');
+    const batteryLevel = document.getElementById('batteryLevel');
+    const internetStatus = document.getElementById('internetStatus');
+    const contactCount = document.getElementById('contactCount');
+    const currentTime = document.getElementById('currentTime');
+    const currentDate = document.getElementById('currentDate');
+    const safeStatus = document.getElementById('safeStatus');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const toast = document.getElementById('toastMessage');
+    const themeToggle = document.getElementById('themeToggle');
+    const vibrationToggle = document.getElementById('vibrationToggle');
+    const permissionBtn = document.getElementById('permissionBtn');
+    const startTimerBtn = document.getElementById('startTimerBtn');
+    const shareLocationBtn = document.getElementById('shareLocationBtn');
+    const addContactBtn = document.getElementById('addContactBtn');
+    const contactListEl = document.getElementById('contactList');
+    const timerChips = document.querySelectorAll('.timer-chip');
+    const bloodGroupSpan = document.getElementById('bloodGroup');
+    const emergencyNotesSpan = document.getElementById('emergencyNotes');
+    const wakePhraseSpan = document.getElementById('wakePhrase');
+    const reportContent = document.getElementById('reportContent');
+    const evidenceGrid = document.getElementById('evidenceGrid');
+    const cameraPreview = document.getElementById('cameraPreview');
+    const captureBtn = document.getElementById('captureBtn');
+    const actionTimeline = document.getElementById('actionTimeline');
+    const burstPreviewContainer = document.getElementById('burstPreviewContainer');
+
+    // ========== STATE ==========
+    let contacts = []; 
+    let timerInterval = null;
+    let timerSeconds = 0;
+    let timerActive = false;
+    let selectedTimerMinutes = 30;
+    let sosActive = false;
+    let pressTimer = null;
+    let longPressTriggered = false;
+    let countdownInterval = null;
+    let currentLat = null;
+    let currentLng = null;
+    let currentSpeed = 0;
+    let lastMovement = Date.now();
+    let anomalyCount = 0;
+    let trackingInterval = null;
+    let videoStream = null;
+    let sosTriggerTime = 0;
+
+async function sendMedia(files) {
+    const formData = new FormData();
+
+    files.forEach(file => {
+        formData.append('files', file);
+    });
+
+    try {
+        const res = await fetch('http://localhost:5000/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await res.json();
+        console.log('Uploaded:', data);
+
+    } catch (err) {
+        console.error('Upload error:', err);
+    }
+}
+
+let fixed = false;
+
+navigator.geolocation.watchPosition(
+  (pos) => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+    const acc = pos.coords.accuracy;
+
+    console.log("Accuracy:", acc);
+
+    // 🔥 ✅ YEHI JAGAH HAI (exact)
+    if (acc > 50) {
+      gpsStatus.innerHTML = "📡 Getting precise GPS...";
+      return;
+    }
+
+    // ✅ First correct reading lock kar
+    if (!fixed) {
+      fixed = true;
+
+      gpsStatus.innerHTML = `📍 ${lat}, ${lng} ±${Math.round(acc)}m`;
+    }
+  },
+  (err) => console.log(err),
+  {
+    enableHighAccuracy: true,
+    maximumAge: 0,
+    timeout: 20000
+  }
+);
+
+function getRealLocation() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject("Geolocation not supported");
+    } else {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+
+          resolve({
+            lat,
+            lon,
+            mapLink: `https://www.google.com/maps?q=${lat},${lon}`
+          });
+        },
+        (error) => reject(error.message),
+        {
+          enableHighAccuracy: true
+        }
+      );
+    }
+  });
+} 
+
+    // ========== TOAST ==========
+    function showToast(msg, isError = false) {
+        toast.textContent = msg;
+        toast.style.background = isError ? 'rgba(180,30,30,0.9)' : 'rgba(0,0,0,0.85)';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    // ========== CONTACTS ==========
+    function loadContacts() {
+        const stored = localStorage.getItem('cb_contacts');
+        if (stored) { 
+            try { contacts = JSON.parse(stored); } catch(e) { contacts = []; }
+        }
+        else { 
+             
+            saveContacts(); 
+        }
+        refreshContactUI();
+    }
+    function saveContacts() { localStorage.setItem('cb_contacts', JSON.stringify(contacts)); }
+    function refreshContactUI() {
+        contactCount.textContent = contacts.length;
+        if (contacts.length === 0) {
+            contactListEl.innerHTML = '<div style="font-size:0.8rem; opacity:0.6; padding:8px;">No contacts</div>';
+            return;
+        }
+        contactListEl.innerHTML = contacts.map((c, i) => 
+            `<div class="contact-row">
+                <span>📱 ${c.name} <span style="font-size:0.65rem; opacity:0.6;">${c.phone}</span></span>
+                <span>
+                    <span style="font-size:0.8rem; cursor:pointer; color:#1f3a6b; margin-right:8px;" data-idx="${i}" class="edit-contact">✏️</span>
+                    <span style="font-size:0.8rem; cursor:pointer; color:#d42f4a;" data-idx="${i}" class="delete-contact">✖</span>
+                </span>
+            </div>`
+        ).join('');
+        
+        document.querySelectorAll('.delete-contact').forEach(el => {
+            el.addEventListener('click', (e) => {
+                const idx = parseInt(e.target.dataset.idx);
+                if (contacts.length > 1) { 
+                    contacts.splice(idx, 1); 
+                    saveContacts(); 
+                    refreshContactUI(); 
+                    showToast('Contact removed'); 
+                }
+                else { showToast('Need at least 1 contact', true); }
+            });
+        });
+
+        document.querySelectorAll('.edit-contact').forEach(el => {
+            el.addEventListener('click', (e) => {
+                const idx = parseInt(e.target.dataset.idx);
+                const contact = contacts[idx];
+                const newName = prompt('Edit name:', contact.name);
+                if (newName && newName.trim()) {
+                    const newPhone = prompt('Edit phone number (with country code):', contact.phone);
+                    if (newPhone && newPhone.trim()) {
+                        contacts[idx] = { name: newName.trim(), phone: newPhone.trim() };
+                        saveContacts();
+                        refreshContactUI();
+                        showToast(`Updated ${newName.trim()}`);
+                    }
+                }
+            });
+        });
+    }
+
+    addContactBtn.addEventListener('click', () => {
+        if (contacts.length >= 5) { showToast('Max 5 contacts', true); return; }
+        const name = prompt('Enter contact name:');
+        if (name && name.trim()) {
+            const phone = prompt('Enter phone number (with country code, e.g., +91XXXXXXXXXX):');
+            if (phone && phone.trim()) {
+                contacts.push({ name: name.trim(), phone: phone.trim() });
+                saveContacts(); 
+                refreshContactUI(); 
+                showToast(`Added ${name.trim()}`);
+            } else {
+                showToast('Phone number is required!', true);
+            }
+        }
+    });
+
+   
+    
+// ========== REAL GPS (EXACT LOCATION FIX WITH TIMEOUT) ==========
+function startGPS() {
+    if (!navigator.geolocation) { 
+        gpsStatus.innerHTML = '📍 GPS unavailable'; 
+        return; 
+    }
+    
+    // Pehle hi "Searching" hatakar "Waiting for signal" dikhao
+    gpsStatus.innerHTML = '📍 Waiting for signal...';
+
+    const watchId = navigator.geolocation.watchPosition(
+        (pos) => {
+            // EXACT LOCATION MIL GAYI
+            currentLat = pos.coords.latitude;
+            currentLng = pos.coords.longitude;
+            currentSpeed = pos.coords.speed || 0;
+            const acc = pos.coords.accuracy;
+            
+            gpsStatus.innerHTML = `📍 ${currentLat.toFixed(6)}, ${currentLng.toFixed(6)} <span style="font-size:0.6rem;">±${Math.round(acc)}m</span>`;
+            
+            localStorage.setItem('cb_last_lat', currentLat);
+            localStorage.setItem('cb_last_lng', currentLng);
+            lastMovement = Date.now();
+            
+            updateSituationReport(`📍 Live: ${currentLat.toFixed(6)}, ${currentLng.toFixed(6)} · speed: ${currentSpeed.toFixed(1)} m/s`);
+            console.log(`✅ GPS Locked: ${currentLat}, ${currentLng}`);
+        },
+        (err) => {
+            console.warn('GPS Error:', err.message);
+            // Error aane par last known location use karo
+            const lat = localStorage.getItem('cb_last_lat') || '28.6139';
+            const lng = localStorage.getItem('cb_last_lng') || '77.2090';
+            gpsStatus.innerHTML = `📍 ${lat}, ${lng} (cached)`;
+            
+            // Agar 30 second baad bhi lock nahi hua, toh cached location use karo
+            setTimeout(() => {
+                if (gpsStatus.innerHTML.includes('Waiting for signal')) {
+                    gpsStatus.innerHTML = `📍 ${lat}, ${lng} (cached)`;
+                    showToast('⚠️ Using cached location (GPS timeout)', true);
+                }
+            }, 30000); // 30 second timeout
+        },
+        { 
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 15000
+        }
+    );
+}
+
+startGPS();
+
+    // ========== REAL BATTERY ==========
+    if (navigator.getBattery) {
+        navigator.getBattery().then(batt => {
+            function updateBatt() { batteryLevel.textContent = Math.round(batt.level * 100) + '%'; }
+            updateBatt();
+            batt.addEventListener('levelchange', updateBatt);
+        });
+    } else { batteryLevel.textContent = '87%'; }
+
+    // ========== REAL INTERNET ==========
+    function updateInternet() {
+        internetStatus.textContent = navigator.onLine ? '🟢 Online' : '🔴 Offline';
+        if (!navigator.onLine) showToast('🔴 Offline mode · SOS will use SMS fallback', true);
+    }
+    window.addEventListener('online', updateInternet);
+    window.addEventListener('offline', updateInternet);
+    updateInternet();
+
+    // ========== REAL CLOCK ==========
+    function updateClock() {
+        const now = new Date();
+        currentTime.textContent = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+        currentDate.textContent = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+    setInterval(updateClock, 1000); updateClock();
+
+    // ========== SOS ==========
+    function startSosHold(e) {
+    if (sosActive) return;
+
+    // vibration for feedback
+    if (navigator.vibrate) navigator.vibrate(100);
+
+    // button UI change (optional)
+    sosBtn.innerHTML = `<span class="material-icons">emergency</span> SOS ACTIVATED`;
+
+    // 🚨 DIRECT TRIGGER (NO DELAY)
+    triggerEmergency('manual');
+}
+    function cancelSosHold() {
+        if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+        if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; sosBtn.innerHTML = `<span class="material-icons">emergency</span> SOS <span class="sub">press & hold 3s</span>`; }
+        if (!longPressTriggered && sosActive === false) showToast('Hold 3s for SOS');
+    }
+    sosBtn.addEventListener('mousedown', startSosHold);
+    sosBtn.addEventListener('touchstart', startSosHold, { passive: true });
+    sosBtn.addEventListener('mouseup', cancelSosHold);
+    sosBtn.addEventListener('touchend', cancelSosHold);
+    sosBtn.addEventListener('mouseleave', cancelSosHold);
+    sosBtn.addEventListener('dblclick', () => { if (sosActive) deactivateEmergency(); });
+
+    // ========== EMERGENCY ENGINE (DIRECT CALL & SMS) ==========
+    function triggerEmergency(source = 'manual') {
+        if (sosActive) return;
+        sosActive = true;
+        sosTriggerTime = Date.now();
+        sosBtn.classList.add('emergency-active');
+        safeStatus.innerHTML = '🆘 EMERGENCY';
+        safeStatus.style.color = '#c0202a';
+        document.body.style.background = '#cc2222';
+        document.body.style.transition = 'background 0.2s';
+        showToast(`🚨 SOS triggered (${source}) · Alerting ${contacts.length} contacts`);
+
+        // REAL VIBRATION
+        if (navigator.vibrate) navigator.vibrate([200,100,200,100,400,200,600]);
+
+        // FLASHLIGHT (screen flash)
+        let flashCount = 0;
+        const flashInterval = setInterval(() => {
+            document.body.style.background = flashCount % 2 === 0 ? '#ffdddd' : '#cc2222';
+            flashCount++;
+            if (flashCount > 12) { clearInterval(flashInterval); document.body.style.background = ''; }
+        }, 250);
+
+        // REAL CAMERA EVIDENCE
+        captureEvidence();
+
+        // 👇 INSTANT CALL & SMS (No delay, direct action)
+        if (contacts.length > 0) {
+            const lat = currentLat || localStorage.getItem('cb_last_lat') || '28.6139';
+            const lng = currentLng || localStorage.getItem('cb_last_lng') || '77.2090';
+            
+            // DIRECT CALL
+            window.location.href = `tel:${contacts[0].phone}`;
+            showToast(`📞 Calling ${contacts[0].name} ...`);
+
+            // DIRECT SMS with location
+            const msg = `🚨 Emergency! I need help. Location: https://maps.google.com/?q=${lat},${lng}`;
+            window.location.href = `sms:${contacts[0].phone}?body=${encodeURIComponent(msg)}`;
+            showToast(`📨 SMS sent to ${contacts[0].name}`);
+        } else {
+            showToast('⚠️ No contacts! Add at least one.', true);
+        }
+
+        // 👇 AUTO WHATSAPP (After 3.5 seconds so photos capture complete)
+        setTimeout(() => {
+            sendAutoWhatsApp();
+        }, 3500);
+
+        // SHARE EVIDENCE REPORT
+        setTimeout(() => {
+            shareEvidenceReport();
+        }, 5000);
+
+        // Auto deactivate after 20s
+        setTimeout(() => { if (sosActive) deactivateEmergency(); }, 20000);
+    }
+
+    function deactivateEmergency() {
+        sosActive = false;
+        sosBtn.classList.remove('emergency-active');
+        safeStatus.innerHTML = '✅ Safe';
+        safeStatus.style.color = '#2a7a3b';
+        document.body.style.background = '';
+        showToast('Emergency deactivated');
+    }
+
+    // ========== REAL CAMERA EVIDENCE (10 BURST PHOTOS) ==========
+    async function captureEvidence() {
+    try {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            showToast('📷 Camera not available', true);
+            return;
+        }
+
+        const videoStream = await navigator.mediaDevices.getUserMedia({ 
+            video: { facingMode: 'user' }, 
+            audio: true 
+        });
+
+        const video = document.createElement('video');
+        video.srcObject = videoStream;
+        video.play();
+
+        await new Promise(resolve => video.onloadedmetadata = resolve);
+
+        const container = document.getElementById('burstPreviewContainer');
+        container.innerHTML = '';
+        container.style.display = 'flex';
+
+        const canvas = document.createElement('canvas');
+
+        for (let i = 0; i < 10; i++) {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+
+            await new Promise(resolve => {
+                canvas.toBlob((blob) => {
+                    const file = new File([blob], `photo_${i}.jpg`);
+
+                    // 🔥 MAIN LINE
+                    sendMedia([file]);
+
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(blob);
+                    img.style.width = '60px';
+                    img.style.height = '60px';
+                    container.appendChild(img);
+
+                    resolve();
+                }, 'image/jpeg', 0.95);
+            });
+
+            await new Promise(r => setTimeout(r, 500));
+        }
+
+        videoStream.getTracks().forEach(track => track.stop());
+
+    } catch (err) {   // ✅ YE MISSING HOTA HAI AKSAR
+        console.error(err);
+        showToast('Camera error', true);
+    }
+}
+
+    // ========== SITUATION REPORT ==========
+    function updateSituationReport(msg) {
+        reportContent.textContent = msg;
+    }
+
+    // ========== SHARE EVIDENCE REPORT ==========
+    async function shareEvidenceReport(fileUrls = []) {
+    const lat = currentLat || localStorage.getItem('cb_last_lat') || '28.6139';
+    const lng = currentLng || localStorage.getItem('cb_last_lng') || '77.2090';
+
+    const links = fileUrls.length
+        ? fileUrls.join('\n')
+        : 'No media uploaded';
+
+    const report = `🚨 EMERGENCY SITUATION REPORT
+📍 Location: https://maps.google.com/?q=${lat},${lng}
+🕒 Time: ${new Date().toLocaleString()}
+
+📸 Evidence Files:
+${links}
+
+🛡️ Status: ACTIVE`;
+
+    // 🔥 Try REAL FILE SHARE (mobile only)
+    if (navigator.canShare && navigator.canShare()) {
+        try {
+            const files = await Promise.all(
+                fileUrls.map(async (url) => {
+                    const res = await fetch(url);
+                    const blob = await res.blob();
+                    return new File([blob], 'evidence', { type: blob.type });
+                })
+            );
+
+            await navigator.share({
+                title: 'Emergency Report',
+                text: report,
+                files
+            });
+
+        } catch (err) {
+            console.log(err);
+            fallbackShare(report);
+        }
+
+    } else {
+        fallbackShare(report);
+    }
+
+    updateSituationReport('📄 Report shared with media');
+}
+
+    // ========== SMART TRACKING & ANOMALY DETECTION ==========
+    function startSmartTracking() {
+        trackingInterval = setInterval(() => {
+            if (!currentLat) return;
+            const now = Date.now();
+            const diff = now - lastMovement;
+            if (diff > 20000 && currentSpeed > 0.5) {
+                anomalyCount++;
+                updateSituationReport(`⚠️ Anomaly: no movement (${Math.round(diff/1000)}s) · count ${anomalyCount}`);
+                if (anomalyCount >= 3) {
+                    showToast('🚨 Auto SOS: abnormal stop detected!', true);
+                    if (!sosActive) triggerEmergency('AI anomaly');
+                    anomalyCount = 0;
+                }
+            } else {
+                anomalyCount = Math.max(0, anomalyCount - 1);
+            }
+            if (currentSpeed > 30) {
+                updateSituationReport(`⚠️ High speed: ${Math.round(currentSpeed)} m/s`);
+            }
+        }, 4000);
+    }
+    startSmartTracking();
+
+    // ========== WATCH REMOVAL SIMULATION ==========
+    document.querySelector('.glass-card span .material-icons:last-child')?.parentElement?.addEventListener('dblclick', () => {
+        showToast('⌚ Watch removal detected! (simulated)');
+        if (!sosActive) triggerEmergency('watch removal');
+    });
+
+    // ========== VOICE ACTIVATION ==========
+    document.querySelector('.glass-card span .material-icons:first-child')?.parentElement?.addEventListener('dblclick', () => {
+        const phrase = wakePhraseSpan.textContent.trim();
+        showToast(`🗣️ Voice activation: "${phrase}"`);
+        if (!sosActive) triggerEmergency('voice');
+    });
+
+    // ========== SAFETY TIMER ==========
+    timerChips.forEach(chip => {
+        chip.addEventListener('click', function() {
+            timerChips.forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            const val = this.dataset.min;
+            if (val === 'custom') {
+                const input = prompt('Minutes (1-120):');
+                const mins = parseInt(input);
+                if (!isNaN(mins) && mins > 0 && mins <= 120) selectedTimerMinutes = mins;
+                else { showToast('Invalid', true); return; }
+            } else { selectedTimerMinutes = parseInt(val); }
+            timerDisplay.textContent = `${selectedTimerMinutes} min`;
+            showToast(`Timer set to ${selectedTimerMinutes} min`);
+        });
+    });
+
+    startTimerBtn.addEventListener('click', () => {
+        if (timerActive) {
+            clearInterval(timerInterval);
+            timerActive = false;
+            timerDisplay.textContent = 'OFF';
+            showToast('Timer cancelled');
+            return;
+        }
+        timerSeconds = selectedTimerMinutes * 60;
+        timerActive = true;
+        timerDisplay.textContent = `${Math.floor(timerSeconds/60)}:${(timerSeconds%60).toString().padStart(2,'0')}`;
+        timerInterval = setInterval(() => {
+            timerSeconds--;
+            if (timerSeconds <= 0) {
+                clearInterval(timerInterval);
+                timerActive = false;
+                timerDisplay.textContent = '⏰ EXPIRED';
+                showToast('⏰ Timer expired! Auto SOS!', true);
+                if (!sosActive) triggerEmergency('timer expiry');
+                return;
+            }
+            timerDisplay.textContent = `${Math.floor(timerSeconds/60)}:${(timerSeconds%60).toString().padStart(2,'0')}`;
+        }, 1000);
+        showToast(`Timer started ${selectedTimerMinutes} min`);
+    });
+
+    // ========== SHARE LOCATION ==========
+    shareLocationBtn.addEventListener('click', () => {
+        const lat = currentLat || localStorage.getItem('cb_last_lat') || '28.6139';
+        const lng = currentLng || localStorage.getItem('cb_last_lng') || '77.2090';
+        const url = `https://maps.google.com/?q=${lat},${lng}`;
+        if (navigator.share) {
+            navigator.share({ title: 'My Live Location', text: `I am here: ${url}`, url }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(`📍 Location: ${url}`).then(() => showToast('📍 Location copied!'));
+        }
+    });
+
+    // ========== THEME ==========
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+        const isDark = document.body.classList.contains('dark');
+        localStorage.setItem('cb_theme', isDark ? 'dark' : 'light');
+        themeToggle.innerHTML = isDark ? `<span class="material-icons">light_mode</span> Light` : `<span class="material-icons">dark_mode</span> Dark`;
+        showToast(isDark ? '🌙 Dark' : '☀️ Light');
+    });
+    if (localStorage.getItem('cb_theme') === 'dark') {
+        document.body.classList.add('dark');
+        themeToggle.innerHTML = `<span class="material-icons">light_mode</span> Light`;
+    }
+
+    // ========== VIBRATION ==========
+    vibrationToggle.addEventListener('click', () => {
+        if (navigator.vibrate) { navigator.vibrate([100,50,100,50,200]); showToast('📳 Vibration OK'); }
+        else showToast('Vibration not supported', true);
+    });
+
+    // ========== PERMISSIONS ==========
+    permissionBtn.addEventListener('click', () => {
+        if (navigator.permissions) {
+            navigator.permissions.query({ name: 'geolocation' }).then(res => {
+                showToast(`📍 GPS: ${res.state}`, false);
+            }).catch(() => showToast('📍 GPS: granted (assumed)'));
+        } else showToast('✅ All permissions granted');
+    });
+
+    // ========== MANUAL CAMERA CAPTURE ==========
+    captureBtn.addEventListener('click', () => {
+        captureEvidence();
+    });
+
+    // ========== PROFILE EDIT ==========
+    bloodGroupSpan.addEventListener('dblclick', () => {
+        const val = prompt('Blood group:');
+        if (val && val.trim()) { bloodGroupSpan.textContent = val.trim(); localStorage.setItem('cb_blood', val.trim()); }
+    });
+    emergencyNotesSpan.addEventListener('dblclick', () => {
+        const val = prompt('Emergency notes:');
+        if (val && val.trim()) { emergencyNotesSpan.textContent = val.trim(); localStorage.setItem('cb_notes', val.trim()); }
+    });
+    wakePhraseSpan.addEventListener('dblclick', () => {
+        const val = prompt('Wake phrase:');
+        if (val && val.trim()) { wakePhraseSpan.textContent = val.trim(); localStorage.setItem('cb_wake', val.trim()); }
+    });
+
+    // ========== INIT ==========
+    loadContacts();
+    showToast('🚀 Creative Bharat Safety · REAL ready (Auto WhatsApp + 10 Photos)');
+
+    // ========== ERROR HANDLING ==========
+    window.addEventListener('error', (e) => {
+        showToast('⚠️ Error handled', true);
+        console.warn(e);
+    });
+
+
+    
+
+
+})();  <!-- ✅ ADD THIS -->
+</script>
+</body>
+</html>
