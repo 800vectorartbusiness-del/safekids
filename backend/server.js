@@ -66,7 +66,7 @@ const Media = mongoose.model('Media', mediaSchema);
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
     cb(null, uploadPath); // ✅ absolute path use karo
-}
+},
     filename: function (req, file, cb) {
         const uniqueName = Date.now() + '-' + file.originalname;
         cb(null, uniqueName);
