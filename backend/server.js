@@ -56,10 +56,12 @@ const mediaSchema = new mongoose.Schema({
 const Media = mongoose.model('Media', mediaSchema);
 
 // ========= MULTER SETUP =========
+const uploadPath = path.join(__dirname, 'uploads');
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, 'uploads'));
-},
+        cb(null, uploadPath);   // ✅ correct path
+    },
     filename: function (req, file, cb) {
         const uniqueName = Date.now() + '-' + file.originalname;
         cb(null, uniqueName);
