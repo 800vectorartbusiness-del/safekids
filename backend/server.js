@@ -7,7 +7,8 @@ const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
 
-
+// 🔥 YE LINE YAHA LAGEGI
+app.use('/uploads', express.static('uploads'));
 
 // ========= INIT =========
 const app = express();
@@ -125,7 +126,13 @@ app.post('/upload', upload.array('files'), async (req, res) => {
 app.get('/media', async (req, res) => {
     try {
         const media = await Media.find().sort({ uploadedAt: -1 });
-        res.json(media);
+
+        const updated = media.map(item => ({
+            ...item._doc,
+            url: `https://safekidsfast.onrender.com/uploads/${item.filename}`
+        }));
+
+        res.json(updated);
     } catch (err) {
         res.status(500).json({ error: 'Fetch failed' });
     }
