@@ -58,7 +58,7 @@ const Media = mongoose.model('Media', mediaSchema);
 // ========= MULTER SETUP =========
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-    cb(null, uploadPath); // ✅ absolute path use karo
+    cb(null, upload); // ✅ absolute path use karo
 },
     filename: function (req, file, cb) {
         const uniqueName = Date.now() + '-' + file.originalname;
