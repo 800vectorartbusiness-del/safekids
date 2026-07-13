@@ -7,14 +7,7 @@ const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
 
-const fs = require("fs");
 
-const uploadPath = path.join(__dirname, "uploads");
-
-// 👇 ye line folder auto bana degi agar nahi hua
-if (!fs.existsSync(uploadPath)) {
-    fs.mkdirSync(uploadPath);
-}
 
 // ========= INIT =========
 const app = express();
