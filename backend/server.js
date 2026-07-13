@@ -7,8 +7,7 @@ const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
 
-// 🔥 YE LINE YAHA LAGEGI
-app.use('/uploads', express.static('uploads'));
+
 
 // ========= INIT =========
 const app = express();
